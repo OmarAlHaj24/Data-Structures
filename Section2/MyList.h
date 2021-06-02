@@ -3,30 +3,39 @@
 #define MYLIST_H
 
 template<class T>
-struct ListNode {
+class ListNode {
+private:
 	T value;
 	ListNode<T>* next;
 	ListNode<T>* prev;
+public:
 	ListNode();
 	ListNode(T data);
+	T getValue();
+	void setValue(T val);
+	ListNode* getNext();
+	ListNode* getPrev();
+	void setNext(ListNode<T>* nt);
+	void setPrev(ListNode<T>* previous);
 };
 
 template<class T>
 class MyList {
 
 private:
-	ListNode* head, * tail;
+	ListNode<T>* head, * tail;
+	ListNode<T>* dummy;
 	int size;
 public:
 	MyList();
 	MyList(T data, int init_size);
 	~MyList();
-	int size() const;
+	int getSize() const;
 	MyList<T>& operator = (MyList<T> another_list);
 
 	class iterator {
 	private:
-		ListNode* node;
+		ListNode<T>* node;
 		iterator();
 		iterator(ListNode<T>* newNode);  //All node pointers in the list class of the iterator class should be private and inaccessible from outside of the class.
 	public:
@@ -39,9 +48,28 @@ public:
 	};
 
 	void insert(T value, iterator position);
-	iterator begin() const;
-	iterator end() const;
-	iterator erase(iterator position);
-};
+	iterator begin() const {
+		return iterator(head);
+	}
 
-#endif
+	iterator end() const {
+		return iterator(dummy);
+	}
+
+	iterator erase(iterator position) {
+		ListNode<T>* temp = head;
+		while (temp != dummy) {
+			if (temp == position.node) {
+				temp->getNext()->setPrev(temp->getPrev);
+				temp->getPrev()->setNext(temp->getNext);
+				position = temp->getNext();
+				delete temp;
+				size--;
+				return position;
+			}
+		}
+		throw"Position not found";
+	}
+
+};
+#endif 
