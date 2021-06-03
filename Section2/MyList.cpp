@@ -1,5 +1,6 @@
 #include "MyList.h"
-
+#include<iostream>
+using namespace std;
 
 template<class T>
 ListNode<T>::ListNode() : value(0), next(nullptr), prev(nullptr) {}
@@ -28,7 +29,7 @@ void ListNode<T>::setPrev(ListNode<T>* previous) {
 }
 
 template<class T>
-T ListNode<T>::getValue() {
+T& ListNode<T>::getValue() {
 	return value;
 }
 
@@ -36,7 +37,7 @@ template<class T>
 void ListNode<T>::setValue(T val) {
 	value = val;
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 template<class T>
 MyList<T>::MyList() : size(0) {
@@ -64,7 +65,7 @@ MyList<T>::MyList(T data, int init_size) : size(init_size) {
 				tail->setPrev(temp);
 			}
 			else {
-				ListNode<T>* temp = new ListNode<T>(++data);
+				ListNode<T>* temp = new ListNode<T>(data);
 				temp->setPrev(tail);
 				tail->setNext(temp);
 				tail = temp;
@@ -88,7 +89,8 @@ MyList<T>::~MyList() {
 		delete head;
 		head = temp;
 	}
-	delete tail, dummy;
+	delete dummy, tail;
+	size = 0;
 }
 
 template<class T>
@@ -110,14 +112,14 @@ T& MyList<T>::iterator::operator*() const {
 
 template<class T>
 void MyList<T>::iterator::operator++() {
-	if (this->node == tail)
+	if (this->node->getNext() == nullptr)
 		throw"End of the List";
 	node = node->getNext();
 }
 
 template<class T>
 void MyList<T>::iterator::operator--() {
-	if (this->node == head)
+	if (this->node->getPrev() == nullptr)
 		throw"We are already at the beginning of the list";
 	node = node->getPrev();
 }
@@ -137,49 +139,67 @@ template<class T>
 void MyList<T>::insert(T value, iterator position) {
 	ListNode<T>* temp = head;
 
-	while (temp != dummy) {
+	while (temp != nullptr) {
 		if (temp == position.node) {
 			ListNode<T>* t = new ListNode<T>(value);
 			t->setPrev(temp->getPrev());
 			t->setNext(temp);
+			if (temp != head)
+				temp->getPrev()->setNext(t);
 			temp->setPrev(t);
-			t->getPrev()->setNext(t);
+
 
 			if (temp == head) {
 				head = t;
 			}
 			if (temp == tail) {
 				tail = t;
+				dummy->setPrev(tail);
 			}
+			if (temp == dummy) {
+				tail = t;
+				dummy->setPrev(tail);
+				tail->setNext(dummy);
+			}
+			break;
 		}
+		temp = temp->getNext();
 	}
 }
 
 template<class T>
-MyList<T>& MyList<T>::operator = (MyList<T> another_list) {
-	MyList<T> temp;
+MyList<T>& MyList<T>::operator = (const MyList<T>& another_list) {
+	head = tail = new ListNode<T>;
+	dummy = new ListNode<T>;
+	dummy->setPrev(tail);
+	tail->setNext(dummy);
 	if (another_list.head == nullptr) {
-		return temp;
+		return *this;
 	}
-	temp.size = another_list.size;
+	size = another_list.size;
 	ListNode<T>* another = another_list.head;
-	ListNode<T>* list = temp.head;
+	ListNode<T>* list = head;
 	while (true) {
 		if (another == another_list.head) {
 			list->setValue(another->getValue());
 			another = another->getNext();
 		}
 		else if (another == another_list.tail) {
-			list->setNext(new ListNode<T> * (another->getValue()));
-			temp.tail = list->getNext();
-			temp.tail->setNext(temp.dummy);
-			temp.dummy->setPrev(temp.tail);
-			return temp;
+			ListNode<T>* t = new ListNode<T>(another->getValue());
+			list->setNext(t);
+			tail = t;
+			tail->setPrev(list);
+			tail->setNext(this->dummy);
+			dummy->setPrev(this->tail);
+			another = another->getNext();
+			return *this;
 		}
 		else
 		{
-			list->setNext(new ListNode<T> * (another->getValue()));
+			ListNode<T>* t = new ListNode<T>(another->getValue());
+			list->setNext(t);
 			list->getNext()->setPrev(list);
+			list = list->getNext();
 			another = another->getNext();
 		}
 	}

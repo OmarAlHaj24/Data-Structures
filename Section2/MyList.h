@@ -11,7 +11,7 @@ private:
 public:
 	ListNode();
 	ListNode(T data);
-	T getValue();
+	T& getValue();
 	void setValue(T val);
 	ListNode* getNext();
 	ListNode* getPrev();
@@ -31,7 +31,7 @@ public:
 	MyList(T data, int init_size);
 	~MyList();
 	int getSize() const;
-	MyList<T>& operator = (MyList<T> another_list);
+	MyList<T>& operator = (const MyList<T>& another_list);
 
 	class iterator {
 	private:
@@ -60,18 +60,22 @@ public:
 		ListNode<T>* temp = head;
 		while (temp != dummy) {
 			if (temp == position.node) {
-				temp->getNext()->setPrev(temp->getPrev);
-				temp->getPrev()->setNext(temp->getNext);
+				temp->getNext()->setPrev(temp->getPrev());
+				if (head != temp)
+					temp->getPrev()->setNext(temp->getNext());
 				position = temp->getNext();
 				if (temp == head)
 					head = temp->getNext();
 				else if (temp == tail) {
 					tail = temp->getPrev();
+					dummy->setPrev(tail);
+					tail->setNext(dummy);
 				}
 				delete temp;
 				size--;
 				return position;
 			}
+			temp = temp->getNext();
 		}
 		throw"Position not found";
 	}
