@@ -23,8 +23,7 @@ template<class T>
 class MyList {
 
 private:
-	ListNode<T>* head, * tail;
-	ListNode<T>* dummy;
+	ListNode<T>* head, * tail, * dummyNode;
 	int size;
 public:
 	MyList();
@@ -47,18 +46,45 @@ public:
 		bool operator != (const iterator& anotherITR);
 	};
 
-	void insert(T value, iterator position);
 	iterator begin() const {
 		return iterator(head);
 	}
 
 	iterator end() const {
-		return iterator(dummy);
+		return iterator(tail);
+	}
+
+	iterator insert(T value, iterator position) {
+		ListNode<T>* temp = new ListNode<T>(value);
+		temp->setNext(position.node);
+		if (position.node == head) {
+			temp->setNext(head);
+			head->setPrev(temp);
+			head = temp;
+		}
+		else {
+			position.node->getPrev()->setNext(temp);
+			temp->setPrev(position.node->getPrev());
+			position.node->setPrev(temp);
+			if (position.node == tail) {
+				tail = position.node;
+				tail->setNext(dummyNode);
+				dummyNode->setPrev(tail);
+			}
+			if (position.node == dummyNode) {
+				tail = temp;
+				dummyNode->setPrev(tail);
+				tail->setNext(dummyNode);
+			}
+		}
+		size++;
+		--position;
+		return position;
 	}
 
 	iterator erase(iterator position) {
 		ListNode<T>* temp = head;
-		while (temp != dummy) {
+		while (temp != dummyNode) {
 			if (temp == position.node) {
 				temp->getNext()->setPrev(temp->getPrev());
 				if (head != temp)
@@ -68,14 +94,15 @@ public:
 					head = temp->getNext();
 				else if (temp == tail) {
 					tail = temp->getPrev();
-					dummy->setPrev(tail);
-					tail->setNext(dummy);
+					dummyNode->setPrev(tail);
+					tail->setNext(dummyNode);
 				}
 				delete temp;
 				size--;
 				return position;
 			}
 			temp = temp->getNext();
+			size--;
 		}
 		throw"Position not found";
 	}

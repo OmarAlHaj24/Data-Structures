@@ -42,18 +42,18 @@ void ListNode<T>::setValue(T val) {
 template<class T>
 MyList<T>::MyList() : size(0) {
 	head = tail = new ListNode<T>();
-	dummy = new ListNode<T>();
-	tail->setNext(dummy);
-	dummy->setPrev(tail);
+	dummyNode = new ListNode<T>();
+	tail->setNext(dummyNode);
+	dummyNode->setPrev(tail);
 }
 
 template<class T>
 MyList<T>::MyList(T data, int init_size) : size(init_size) {
-	dummy = new ListNode<T>();
+	dummyNode = new ListNode<T>();
 	if (size > 0) {
 		head = tail = new ListNode<T>(data);
-		tail->setNext(dummy);
-		dummy->setPrev(tail);
+		tail->setNext(dummyNode);
+		dummyNode->setPrev(tail);
 		for (int i = 0; i < size - 1; i++)
 		{
 			if (head->getNext() == nullptr)
@@ -69,15 +69,15 @@ MyList<T>::MyList(T data, int init_size) : size(init_size) {
 				temp->setPrev(tail);
 				tail->setNext(temp);
 				tail = temp;
-				tail->setNext(dummy);
-				dummy->setPrev(tail);
+				tail->setNext(dummyNode);
+				dummyNode->setPrev(tail);
 			}
 		}
 	}
 	else {
 		head = tail = new ListNode<T>();
-		tail->setNext(dummy);
-		dummy->setPrev(tail);
+		tail->setNext(dummyNode);
+		dummyNode->setPrev(tail);
 	}
 
 }
@@ -89,7 +89,8 @@ MyList<T>::~MyList() {
 		delete head;
 		head = temp;
 	}
-	delete dummy, tail;
+	delete dummyNode;
+	delete tail;
 	size = 0;
 }
 
@@ -134,45 +135,12 @@ bool MyList<T>::iterator::operator != (const iterator& anotherITR) {
 	return this->node != anotherITR.node;
 }
 
-
-template<class T>
-void MyList<T>::insert(T value, iterator position) {
-	ListNode<T>* temp = head;
-
-	while (temp != nullptr) {
-		if (temp == position.node) {
-			ListNode<T>* t = new ListNode<T>(value);
-			t->setPrev(temp->getPrev());
-			t->setNext(temp);
-			if (temp != head)
-				temp->getPrev()->setNext(t);
-			temp->setPrev(t);
-
-
-			if (temp == head) {
-				head = t;
-			}
-			if (temp == tail) {
-				tail = t;
-				dummy->setPrev(tail);
-			}
-			if (temp == dummy) {
-				tail = t;
-				dummy->setPrev(tail);
-				tail->setNext(dummy);
-			}
-			break;
-		}
-		temp = temp->getNext();
-	}
-}
-
 template<class T>
 MyList<T>& MyList<T>::operator = (const MyList<T>& another_list) {
 	head = tail = new ListNode<T>;
-	dummy = new ListNode<T>;
-	dummy->setPrev(tail);
-	tail->setNext(dummy);
+	dummyNode = new ListNode<T>;
+	dummyNode->setPrev(tail);
+	tail->setNext(dummyNode);
 	if (another_list.head == nullptr) {
 		return *this;
 	}
@@ -189,8 +157,8 @@ MyList<T>& MyList<T>::operator = (const MyList<T>& another_list) {
 			list->setNext(t);
 			tail = t;
 			tail->setPrev(list);
-			tail->setNext(this->dummy);
-			dummy->setPrev(this->tail);
+			tail->setNext(this->dummyNode);
+			dummyNode->setPrev(this->tail);
 			another = another->getNext();
 			return *this;
 		}
