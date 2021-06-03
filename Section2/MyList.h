@@ -63,6 +63,11 @@ public:
 				temp->getNext()->setPrev(temp->getPrev);
 				temp->getPrev()->setNext(temp->getNext);
 				position = temp->getNext();
+				if (temp == head)
+					head = temp->getNext();
+				else if (temp == tail) {
+					tail = temp->getPrev();
+				}
 				delete temp;
 				size--;
 				return position;

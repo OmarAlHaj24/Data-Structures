@@ -39,7 +39,7 @@ void ListNode<T>::setValue(T val) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<class T>
-MyList<T>::MyList() : size(1) {
+MyList<T>::MyList() : size(0) {
 	head = tail = new ListNode<T>();
 	dummy = new ListNode<T>();
 	tail->setNext(dummy);
@@ -88,7 +88,7 @@ MyList<T>::~MyList() {
 		delete head;
 		head = temp;
 	}
-	delete tail;
+	delete tail, dummy;
 }
 
 template<class T>
@@ -105,7 +105,7 @@ MyList<T>::iterator::iterator(ListNode<T>* newNode) : node(newNode) {}
 
 template<class T>
 T& MyList<T>::iterator::operator*() const {
-	return node->getNext()->getValue();
+	return node->getValue();
 }
 
 template<class T>
@@ -135,13 +135,53 @@ bool MyList<T>::iterator::operator != (const iterator& anotherITR) {
 
 template<class T>
 void MyList<T>::insert(T value, iterator position) {
+	ListNode<T>* temp = head;
 
+	while (temp != dummy) {
+		if (temp == position.node) {
+			ListNode<T>* t = new ListNode<T>(value);
+			t->setPrev(temp->getPrev());
+			t->setNext(temp);
+			temp->setPrev(t);
+			t->getPrev()->setNext(t);
 
+			if (temp == head) {
+				head = t;
+			}
+			if (temp == tail) {
+				tail = t;
+			}
+		}
+	}
 }
 
 template<class T>
 MyList<T>& MyList<T>::operator = (MyList<T> another_list) {
+	MyList<T> temp;
+	if (another_list.head == nullptr) {
+		return temp;
+	}
+	temp.size = another_list.size;
+	ListNode<T>* another = another_list.head;
+	ListNode<T>* list = temp.head;
+	while (true) {
+		if (another == another_list.head) {
+			list->setValue(another->getValue());
+			another = another->getNext();
+		}
+		else if (another == another_list.tail) {
+			list->setNext(new ListNode<T> * (another->getValue()));
+			temp.tail = list->getNext();
+			temp.tail->setNext(temp.dummy);
+			temp.dummy->setPrev(temp.tail);
+			return temp;
+		}
+		else
+		{
+			list->setNext(new ListNode<T> * (another->getValue()));
+			list->getNext()->setPrev(list);
+			another = another->getNext();
+		}
+	}
 
 }
-
-
