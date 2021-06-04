@@ -35,6 +35,7 @@ T &MyQueue<T>::front() {
     }
     catch(const char * arr){
         std::cout << arr << std::endl;
+        exit(0);
     }
 }
 

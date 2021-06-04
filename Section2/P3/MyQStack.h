@@ -26,6 +26,7 @@ int MyQStack::top() {
     }
     catch(const char * arr){
         std::cout << arr << std::endl;
+        exit(0);
     }
 }
 
