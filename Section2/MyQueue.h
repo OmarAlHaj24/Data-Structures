@@ -7,7 +7,6 @@
 #ifndef MYQUEUE_H
 #define MYQUEUE_H
 #include "MyList.h"
-#include "MyList.cpp"
 
 template <class T>
 class MyQueue : protected MyList<T> {
@@ -28,7 +27,15 @@ MyQueue<T>::MyQueue(T data, int size): MyList<T>(data, size){}
 
 template<class T>
 T &MyQueue<T>::front() {
-    return *(this->begin());
+    try{
+        if(this->size() == 0){
+            throw "The Queue Is Empty";
+        }
+        return *(this->begin());
+    }
+    catch(const char * arr){
+        std::cout << arr << std::endl;
+    }
 }
 
 template<class T>

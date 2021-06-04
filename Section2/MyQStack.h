@@ -18,7 +18,15 @@ public:
 };
 
 int MyQStack::top() {
-    return this->front();
+    try{
+        if(this->size() == 0){
+            throw "The Stack Is Empty";
+        }
+        return this->front();
+    }
+    catch(const char * arr){
+        std::cout << arr << std::endl;
+    }
 }
 
 void MyQStack::pop() {
