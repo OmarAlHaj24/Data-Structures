@@ -13,6 +13,7 @@ private:
 private:
 	StackNode* _top;
 	unsigned int _size;
+	T PopElement();
 public:
 	Stack();
 	Stack(T defaultValue, unsigned int initialSize);
@@ -50,6 +51,7 @@ bool Stack<T>::Push(T const& element)
 		return false;
 
 	_top = node;
+	_size++;
 	return true;
 }
 
@@ -60,6 +62,18 @@ T* Stack<T>::Top() const
 	return &(_top->Entry);
 }
 
+// Pre-conditions: It doesn't check boundaries, make sure to check for boundry conditions before calling
+template<class T>
+T Stack<T>::PopElement()
+{
+	StackNode* node = _top;
+	T elementToReturn = node->Entry;
+	_top = _top->Prev;
+	delete node;
+	_size--;
+	return elementToReturn;
+}
+
 // Pre-conditions: Stack must not be empty. Throws an exception if stack is Empty
 // Use TryPop for no exceptions on stack empty
 template<class T>
@@ -68,11 +82,7 @@ T Stack<T>::Pop()
 	if (!_top)
 		throw "Stack is Empty";
 
-	StackNode* node = _top;
-	_top = _top->Prev;
-	T element = node->Entry;
-	delete node;
-	return element;
+	return PopElement();
 }
 
 // outElement: Reference to pop element into.
@@ -83,10 +93,7 @@ bool Stack<T>::TryPop(T& outElement)
 	if (!_top)
 		return false;
 
-	StackNode* node = _top;
-	outElement = node->Entry;
-	_top = _top->Prev;
-	delete node;
+	outElement = PopElement();
 	return true;
 }
 
