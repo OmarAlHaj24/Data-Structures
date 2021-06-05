@@ -98,4 +98,12 @@ bool Stack<T>::TryPop(T& outElement)
 }
 
 template<class T>
-Stack<T>::~Stack() {}
+Stack<T>::~Stack() 
+{
+	while (_top)
+	{
+		StackNode* node = _top;
+		_top = _top->Prev;
+		delete node;
+	}
+}
