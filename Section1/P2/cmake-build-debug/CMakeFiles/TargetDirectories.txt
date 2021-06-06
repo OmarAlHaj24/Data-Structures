@@ -1,0 +1,3 @@
+C:/Users/AmrMahmoud/CLionProjects/insertionSorts/cmake-build-debug/CMakeFiles/insertionSorts.dir
+C:/Users/AmrMahmoud/CLionProjects/insertionSorts/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/AmrMahmoud/CLionProjects/insertionSorts/cmake-build-debug/CMakeFiles/rebuild_cache.dir
