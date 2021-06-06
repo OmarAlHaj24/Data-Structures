@@ -1,4 +1,10 @@
-﻿#pragma once
+﻿/*
+* @author Mirette Amin Danial	20190570
+* @author Rana Ihab Ahmed Fahmy 20190207
+* Created on 2/6/2021
+*/
+
+#pragma once
 #ifndef MYLIST_H
 #define MYLIST_H
 
