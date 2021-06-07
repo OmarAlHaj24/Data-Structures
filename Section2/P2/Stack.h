@@ -59,6 +59,8 @@ bool Stack<T>::Push(T const& element)
 template<class T>
 T* Stack<T>::Top() const
 {
+	if (!_top)
+		return 0;
 	return &(_top->Entry);
 }
 
