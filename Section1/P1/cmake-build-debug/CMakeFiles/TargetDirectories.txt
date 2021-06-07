@@ -1,3 +1,0 @@
-C:/Users/Bazinga/Documents/GitHub/Data-Structures/Section1/P1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-C:/Users/Bazinga/Documents/GitHub/Data-Structures/Section1/P1/cmake-build-debug/CMakeFiles/recSort.dir
-C:/Users/Bazinga/Documents/GitHub/Data-Structures/Section1/P1/cmake-build-debug/CMakeFiles/edit_cache.dir
