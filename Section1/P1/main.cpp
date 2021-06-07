@@ -1,8 +1,10 @@
 #include <iostream>
 #include <vector>
 #include <time.h>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 
 /**
  Merge Sort
@@ -94,12 +96,13 @@ int main() {
 
   vector<int> vect;
   srand (time(0));
-  for(int i = 0 ; i < 500 ; i++){
+  for(int i = 0 ; i < 5000 ; i++){
     vect.push_back(rand()%10000);
   }
+  auto start = high_resolution_clock::now();
   quickSort(vect);
-  for (int i=0; i<vect.size(); ++i) {
-    cout << vect[i] << " ";
-  }
+  auto stop = high_resolution_clock::now();
+  auto duration = duration_cast<microseconds>(stop - start);
+    cout << "Time taken by function: " << duration.count() << " microseconds" << endl;
   return 0;
 }
