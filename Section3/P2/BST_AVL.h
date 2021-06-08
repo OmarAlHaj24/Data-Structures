@@ -29,7 +29,7 @@ public:
 	TreeNode* rotateRight();
 	TreeNode* rotateLeft();
 	TreeNode* insert(int data);
-	TreeNode* deleteNode();
+	TreeNode* deleteNode(int data);
 };
 
 

@@ -29,7 +29,13 @@ TreeNode* TreeNode::rotateRight() {
 }
 
 TreeNode* TreeNode::rotateLeft() {
-	return nullptr;
+	TreeNode* node = this->right;
+	TreeNode* temp = node->left;
+	node->left = this;
+	this->right = temp;
+	this->height = std::max(this->right->height, this->left->height) + 1;
+	node->height = std::max(node->right->height, node->left->height) + 1;
+	return node;
 }
 
 int TreeNode::getValue() {
@@ -93,9 +99,62 @@ TreeNode* TreeNode::insert(int data) {
 	return this;
 }
 
-TreeNode* TreeNode::deleteNode()
+TreeNode* TreeNode::deleteNode(int data)
 {
-	return nullptr;
+	if (this == 0)
+		return this;
+	if (data < value)
+		this->left = this->left->deleteNode(data);
+	else if (data > value)
+		this->right = this->right->deleteNode(data);
+	else {
+		TreeNode* temp;
+		if (this->right == 0 || this->left == 0) {
+			if (this->right == 0)
+				temp = this->left;
+			else
+				temp = this->right;
+			if (temp == 0) {
+				temp = this;
+				*this = 0;
+				delete temp;
+			}
+			else {
+				this->value = temp->value;
+				this->right = temp->right;
+				this->left = temp->left;
+				delete temp;
+			}
+		}
+		else {
+			temp = this->left;
+			while (temp->right != 0) {
+				temp = temp->right;
+			}
+			this->value = temp->value;
+			this->left = this->left->deleteNode(temp->value);
+		}
+	}
+
+	if (this == 0)
+		return this;
+	this->setHeight(std::max(this->right->getHeight(), this->left->getHeight()) + 1);
+	int balance = this->getBalance();
+	if (balance > 1 && this->left->getBalance() >= 0) {
+		return this->rotateRight();
+	}
+	if (balance > 1 && this->left->getBalance() < 0) {
+		this->left = this->left->rotateLeft();
+		return this->rotateRight();
+	}
+	if (balance < -1 && this->right->getBalance() <= 0) {
+		return this->rotateLeft();
+	}
+	if (balance < -1 && this->right->getBalance() > 0) {
+		this->right = this->right->rotateRight();
+		return this->rotateLeft();
+	}
+	return this;
 }
 
 
