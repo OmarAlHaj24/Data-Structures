@@ -69,12 +69,12 @@ TreeNode* insert(TreeNode* node, int data) {
 	}
 	else if (balance < -1) {
 		//Right Right Case
-		if (data > node->left->getValue()) {
+		if (data > node->right->getValue()) {
 			return node->rotateLeft();
 		}
 
 		//Right Left Case
-		if (data < node->left->getValue()) {
+		if (data < node->right->getValue()) {
 			node->right = node->right->rotateRight();
 			return node->rotateLeft();
 		}
@@ -144,8 +144,9 @@ TreeNode* deleteNode(TreeNode* node, int data)
 			node->right = node->right->rotateRight();
 			return node->rotateLeft();
 		}
-		return node;
+
 	}
+	return node;
 }
 
 
@@ -155,13 +156,17 @@ int main()
 
 	TreeNode* root = nullptr;
 
-	root = insert(root, 10);
+	root = insert(root, 15);
 	root = insert(root, 20);
+	root = insert(root, 24);
+	root = insert(root, 10);
+	root = insert(root, 13);
+	root = insert(root, 7);
 	root = insert(root, 30);
-	root = insert(root, 40);
-	root = insert(root, 50);
+	root = insert(root, 36);
 	root = insert(root, 25);
-
+	root = deleteNode(root, 24);
+	root = deleteNode(root, 20);
 	displayTree(PreOrder, root);
 	return 0;
 }

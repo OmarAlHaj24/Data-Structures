@@ -22,8 +22,8 @@ TreeNode* TreeNode::rotateRight() {
 	newNode->right = this;
 	this->left = tempR;
 
-	this->height = std::max(this->right->height, this->left->height) + 1;
-	newNode->height = std::max(newNode->right->height, newNode->left->height) + 1;
+	this->height = std::max(this->right->getHeight(), this->left->getHeight()) + 1;
+	newNode->height = std::max(newNode->right->getHeight(), newNode->left->getHeight()) + 1;
 
 	return newNode;
 }
