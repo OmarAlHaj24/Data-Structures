@@ -5,7 +5,19 @@
 using namespace std;
 
 template <typename t>
-void insertionSort (vector<t> & a) {
+void insertionSort (vector<t>& a, int low, int high) {
+    int j;
+    t tmp;
+    for (int i=low+1; i <= high; ++i) {
+        tmp = a[i];
+        for (j = i; j > low && tmp < a[j-1]; --j)
+            a[j] = a[j-1];
+        a[j] = tmp;
+    }
+}
+
+template <typename t>
+void binaryInsertionSort (vector<t> & a) {
   for (int i=1; i <= a.size(); ++i) {
     t tmp = a[i];
     int low = 0, high = i-1, mid;

@@ -1,7 +1,7 @@
 ﻿/*
 * @author Mirette Amin Danial	20190570
 * @author Rana Ihab Ahmed Fahmy 20190207
-* Created on 2/6/2021
+* Created on 2 / 6 / 2021
 */
 
 #pragma once
@@ -10,13 +10,13 @@
 
 class TreeNode
 {
+private:
 	int value, height;
 public:
 
 	TreeNode* left;
 	TreeNode* right;
 	TreeNode(int v);
-	//TreeNode(int v, int h, TreeNode* l, TreeNode* r);
 
 	int getValue();
 	int getHeight();
@@ -25,13 +25,13 @@ public:
 
 	int getBalance();
 
-
 	TreeNode* rotateRight();
 	TreeNode* rotateLeft();
-	TreeNode* insert(int data);
-	TreeNode* deleteNode();
+
 };
 
-
 #endif // !BST_AVL_H
+
+
+
 

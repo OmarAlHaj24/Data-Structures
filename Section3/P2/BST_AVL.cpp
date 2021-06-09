@@ -7,7 +7,7 @@
 #include<iostream>
 #include "BST_AVL.h"
 
-TreeNode::TreeNode(int v) : value(v), height(0), right(nullptr), left(nullptr) {}
+TreeNode::TreeNode(int v) : value(v), height(1), right(nullptr), left(nullptr) {}
 
 int TreeNode::getBalance() {
 	if (this != nullptr)
@@ -22,14 +22,20 @@ TreeNode* TreeNode::rotateRight() {
 	newNode->right = this;
 	this->left = tempR;
 
-	this->height = std::max(this->right->height, this->left->height) + 1;
-	newNode->height = std::max(newNode->right->height, newNode->left->height) + 1;
+	this->height = std::max(this->right->getHeight(), this->left->getHeight()) + 1;
+	newNode->height = std::max(newNode->right->getHeight(), newNode->left->getHeight()) + 1;
 
 	return newNode;
 }
 
 TreeNode* TreeNode::rotateLeft() {
-	return nullptr;
+	TreeNode* node = this->right;
+	TreeNode* temp = node->left;
+	node->left = this;
+	this->right = temp;
+	this->height = std::max(this->right->getHeight(), this->left->getHeight()) + 1;
+	node->height = std::max(node->right->getHeight(), node->left->getHeight()) + 1;
+	return node;
 }
 
 int TreeNode::getValue() {
@@ -51,51 +57,3 @@ void TreeNode::setValue(int v) {
 void TreeNode::setHeight(int h) {
 	this->height = h;
 }
-
-TreeNode* TreeNode::insert(int data) {
-	if (this == nullptr)
-		return (new TreeNode(data));
-
-	if (this->value > data)
-		this->left = this->left->insert(data);
-	else if (this->value < data)
-		this->right = this->right->insert(data);
-	else
-		return this; //No equal nodes
-
-	this->setHeight(std::max(this->right->getHeight(), this->left->getHeight()) + 1);
-	int balance = this->getBalance();
-
-	if (balance > 1) {
-		//Left Left Case
-		if (data < this->left->getValue())
-			return this->rotateRight();
-
-		//Left Right Case
-		if (data > this->left->getValue()) {
-			this->left = this->left->rotateLeft();
-			return this->rotateRight();
-		}
-	}
-	else if (balance < -1) {
-		//Right Right Case
-		if (data > this->left->getValue()) {
-			return this->rotateLeft();
-		}
-
-		//Right Left Case
-		if (data < this->left->getValue()) {
-			this->right = this->right->rotateRight();
-			return this->rotateLeft();
-		}
-	}
-
-	return this;
-}
-
-TreeNode* TreeNode::deleteNode()
-{
-	return nullptr;
-}
-
-
