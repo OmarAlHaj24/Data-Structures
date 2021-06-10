@@ -1,6 +1,6 @@
 ﻿/*
-* @author Mirette Amin Danial	20190570
-* @author Rana Ihab Ahmed Fahmy 20190207
+* @author Mirette Amin Danial	20190570 S10
+* @author Rana Ihab Ahmed Fahmy 20190207 S10
 * Created on 2/6/2021
 */
 
@@ -105,27 +105,31 @@ public:
 
 
 	iterator erase(iterator position) {
-		ListNode<T>* temp = head;
-		while (temp != dummyNode) {
-			if (temp == position.node) {
-				temp->getNext()->setPrev(temp->getPrev());
-				if (head != temp)
-					temp->getPrev()->setNext(temp->getNext());
-				position = temp->getNext();
-				if (temp == head)
-					head = temp->getNext();
-				else if (temp == tail) {
-					tail = temp->getPrev();
-					tail->setNext(dummyNode);
-					dummyNode->setPrev(tail);
-				}
-				delete temp;
-				size--;
-				return position;
+		try{
+			if(position.node == dummyNode)
+				throw"Position not found";
+			ListNode<T>* temp = position.node;
+			temp->getNext()->setPrev(temp->getPrev());
+			if (head != temp)
+				temp->getPrev()->setNext(temp->getNext());
+			position = temp->getNext();
+			if (temp == head)
+				head = temp->getNext();
+			else if (temp == tail) {
+				tail = temp->getPrev();
+				tail->setNext(dummyNode);
+				dummyNode->setPrev(tail);
 			}
-			temp = temp->getNext();
+			delete temp;
+			size--;
+			return position;
+
 		}
-		throw"Position not found";
+		catch (const char* arr) {
+			std::cout << arr << std::endl;
+
+		}
+		
 	}
 
 };
@@ -239,16 +243,28 @@ T& MyList<T>::iterator::operator*() const {
 
 template<class T>
 void MyList<T>::iterator::operator++() {
-	if (this->node->getNext() == nullptr)
-		throw"End of the List";
-	node = node->getNext();
+	try {
+		if (this->node->getNext() == nullptr)
+			throw"End of the List";
+		node = node->getNext();
+	}
+	catch (const char* arr) {
+		std::cout << arr << std::endl;
+		exit(0);
+	}
 }
 
 template<class T>
 void MyList<T>::iterator::operator--() {
-	if (this->node->getPrev() == nullptr)
-		throw"We are already at the beginning of the list";
-	node = node->getPrev();
+	try {
+		if (this->node->getPrev() == nullptr)
+			throw"We are already at the beginning of the list";
+		node = node->getPrev();
+	}
+	catch (const char* arr) {
+		std::cout << arr << std::endl;
+		exit(0);
+	}
 }
 
 template<class T>

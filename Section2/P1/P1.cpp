@@ -1,5 +1,5 @@
 #include <iostream>
-#include "MyList1.h"
+#include "MyList.h"
 
 using namespace std;
 
@@ -49,19 +49,19 @@ int main()
             if (*it2 < *it) {
                 it = list1.insert(*it2, it);
                 ++it;
-                it2 = list2.erase(it2);
+                ++it2;
             }
             else if (*it < *it2) {
                 ++it;
             }
             else {
-                it2 = list2.erase(it2);
+                ++it2;
             }
         }
 
         while (it2 != list2.end()) {
             list1.insert(*it2, list1.end());
-            it2 = list2.erase(it2);
+            ++it2;
         }
 
         cout << "After merging List1 and List2: ";
